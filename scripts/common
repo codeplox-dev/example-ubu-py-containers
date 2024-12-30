@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+print_info(){
+    printf "+++ INFO | %s\n"  "$*" >&2;
+}
+
+
+print_err(){
+    printf "+++ ERRR | %b\n"  "$*" >&2;
+}
+
+
+print_warn(){
+    printf "+++ WARN | %s\n"  "$*" >&2;
+}
+
+
+print_func_banner(){ local funcname="${1}"
+    printf "========== Inside: %s ==========\n" "${funcname}" >&2;
+}
+
+
+run_cmd() {
+    tmp=$(mktemp) || return # this will be the temp file w/ the output
+
+    "$@"  > "$tmp" 2>&1 # this should run the command, respecting all arguments
+    ret=$?
+
+    [ "$ret" -eq 0 ] || {
+        print_err "'$@' failed; Output below:\n<START>\n$(cat "$tmp")\n<END>"; # if $? (the return of the last run command) is not zero, cat the temp file
+    }
+    rm -f "$tmp"
+
+    return "$ret" # return the exit status of the command
+}

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# USAGE:
+#    [EXTRA_DOCKER_ARGS=...] ./build-img
+
+
+scripts_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+. "${scripts_dir}/common"
+
+
+check-docker-buildx(){
+    if ! docker buildx version &>/dev/null; then
+        print_err "Must install docker buildx to build amd64 from non x86"
+        exit 1
+    fi
+}
+
+
+docker-build-cmd(){
+    os="$(uname -m)"
+    if [[ "${os}" != "x86_64" ]]; then
+        check-docker-buildx
+        echo "buildx build --platform linux/amd64"
+    else
+        echo "build"
+    fi
+}
+
+img_name(){
+    cat IMG_NAME
+}
+
+img_vers(){
+    cat VERSION
+}
+
+
+main(){
+    local build img_name vers
+
+    build="$(docker-build-cmd)"
+    img_name="$(img_name)"
+    vers="$(img_vers)"
+
+    docker ${build} ${EXTRA_DOCKER_ARGS:-} -t ${img_name}:${vers} --progress plain --no-cache .
+}
+
+main

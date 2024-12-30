@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+scripts_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+. "${scripts_dir}/common"
+
+
+fetch_py_tgz(){ local vers="${1}"
+    local url="https://www.python.org/ftp/python/${vers}/Python-${vers}.tgz"
+
+    command -v wget &>/dev/null || {
+        print_err "Please install 'wget'";
+        exit 1;
+    }
+
+    rm "Python-${vers}.tgz" &>/dev/null || true
+
+    run_cmd wget "${url}" || {
+        print_err "Could not fetch Python? 'wget ${url}' failed";
+        exit 2;
+    }
+}
+
+
+[[ "${1:-}" == "" ]] && {
+    print_err "Must specify MAJOR.MINOR.PATCH of python to fetch";
+    exit 1;
+}
+
+fetch_py_tgz "${1}"
