@@ -23,7 +23,7 @@ target "python311" {
       "linux/arm64",
     ]
     contexts = {
-        ubu2404-plox-builder = "target:builder"
+        ubu2404-python-base = "target:builder"
     }
     #attest = [
     #  "type=provenance,mode=max",
@@ -39,7 +39,7 @@ target "python312" {
       "linux/arm64",
     ]
     contexts = {
-        ubu2404-plox-builder = "target:builder"
+        ubu2404-python-base = "target:builder"
     }
     #attest = [
     #  "type=provenance,mode=max",
@@ -55,7 +55,7 @@ target "python313" {
       "linux/arm64",
     ]
     contexts = {
-        ubu2404-plox-builder = "target:builder"
+        ubu2404-python-base = "target:builder"
     }
     #attest = [
     #  "type=provenance,mode=max",
