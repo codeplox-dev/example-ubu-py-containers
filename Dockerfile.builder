@@ -57,7 +57,7 @@ RUN ./scripts/fetch-python-tgz ${PY_311_VERS} && \
   python3.11 get-pip.py && rm -rf /usr/local/src/Python* && \
   ln -sf /usr/local/bin/python3.11 /usr/local/bin/python && \
   ln -sf /usr/local/bin/python3.11 /usr/local/bin/python3 && \
-  apt-get autoremove --purge build-essential gdb lcov pkg-config \
+  apt-get autoremove --purge -yq build-essential gdb lcov pkg-config \
       libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
       libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \
       lzma lzma-dev tk-dev uuid-dev zlib1g-dev wget
